@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+.cache/
+
+# Test / coverage
+coverage/
+.coverage
+htmlcov/
+.pytest_cache/
+.vitest/
+
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets – never commit
+*.pem
+*.key
+*.p12
+secrets/

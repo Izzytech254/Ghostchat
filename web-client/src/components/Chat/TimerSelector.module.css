@@ -1,0 +1,54 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.select {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 255, 128, 0.4);
+  border-radius: 0;
+  color: var(--accent);
+  font-size: 12px;
+  font-family: "JetBrains Mono", monospace;
+  padding: 8px 12px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+}
+.select:hover {
+  border-color: var(--accent);
+}
+.select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 15px rgba(0, 255, 128, 0.3);
+}
+
+.delTypes {
+  display: flex;
+  gap: 6px;
+}
+
+.delBtn {
+  background: transparent;
+  border: 1px solid rgba(0, 255, 128, 0.3);
+  border-radius: 0;
+  color: rgba(0, 255, 128, 0.5);
+  font-size: 12px;
+  font-family: "JetBrains Mono", monospace;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delBtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.delBtn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+  font-weight: 600;
+  box-shadow: 0 0 15px rgba(0, 255, 128, 0.4);
+}

@@ -1,0 +1,63 @@
+name: GhostChat CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── Relay server ────────────────────────────────────────────────────────────
+  relay-tests:
+    name: Relay Server (Node.js)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: npm ci
+      - run: npm test
+
+  # ── Key server ──────────────────────────────────────────────────────────────
+  key-server-tests:
+    name: Key Server (Python)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: key-server
+    services:
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r requirements.txt
+      - run: pytest tests/ -v
+
+  # ── Web client ───────────────────────────────────────────────────────────────
+  web-tests:
+    name: Web Client (Vitest)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web-client
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: npm ci
+      - run: npm test
+
+  # ── Docker build check ───────────────────────────────────────────────────────
+  docker-build:
+    name: Docker Compose Build
+    runs-on: ubuntu-latest
+    needs: [relay-tests, key-server-tests, web-tests]
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose build

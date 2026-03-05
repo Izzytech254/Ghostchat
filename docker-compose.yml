@@ -1,0 +1,85 @@
+version: "3.9"
+
+# ─────────────────────────────────────────────────────────────────
+#  GhostChat – local development stack
+#
+#  Services:
+#    relay      – Node.js WebSocket relay (can't read messages)
+#    key-server – Python FastAPI public-key distribution
+#    redis      – Temporary message queue + key storage
+#    web        – Vite dev server (React)
+# ─────────────────────────────────────────────────────────────────
+
+services:
+  # ── Redis ────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports: ["6379:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ── Relay server ─────────────────────────────────────────────────
+  relay:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8080:8080" # WebSocket
+      - "3001:3001" # HTTP health
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      HTTP_PORT: 3001
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      MAX_QUEUE_DAYS: 30
+      CLEANUP_INTERVAL_MS: 3600000
+      LOG_LEVEL: info
+    depends_on:
+      redis: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Key distribution server ───────────────────────────────────────
+  key-server:
+    build:
+      context: ./key-server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports: ["8000:8000"]
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      KEY_TTL_SECONDS: 2592000
+      MAX_ONE_TIME_KEYS: 100
+      LOG_LEVEL: info
+    depends_on:
+      redis: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Web client (dev mode) ─────────────────────────────────────────
+  web:
+    build:
+      context: ./web-client
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports: ["5173:5173"]
+    environment:
+      VITE_RELAY_URL: ws://localhost:8080
+      VITE_KEY_SERVER: http://localhost:8000
+    depends_on:
+      - relay
+      - key-server
