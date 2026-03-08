@@ -6,6 +6,8 @@ import TimerSelector from "./TimerSelector";
 import EmojiPicker from "./EmojiPicker";
 import MediaPicker, { MediaFile } from "./MediaPicker";
 import type { DeletionType, Chat } from "@/types";
+
+import PaperPlaneIcon from "./PaperPlaneIcon";
 import styles from "./ChatWindow.module.css";
 
 interface Props {
@@ -108,9 +110,7 @@ export default function ChatWindow({ chatId, onBack }: Props) {
 
       <div className={styles.messages}>
         {messages.length === 0 && (
-          <p className={styles.empty}>
-            Whisper Without Worry ✨
-          </p>
+          <p className={styles.empty}>Whisper Without Worry ✨</p>
         )}
         {messages.map((msg) => (
           <MessageBubble
@@ -133,7 +133,9 @@ export default function ChatWindow({ chatId, onBack }: Props) {
           {mediaPreview.type === "audio" && (
             <audio src={mediaPreview.preview} controls />
           )}
-          <button className={styles.clearMedia} onClick={clearMedia}>×</button>
+          <button className={styles.clearMedia} onClick={clearMedia}>
+            ×
+          </button>
         </div>
       )}
 
@@ -187,7 +189,7 @@ export default function ChatWindow({ chatId, onBack }: Props) {
           }}
         />
         <button className={styles.sendBtn} onClick={handleSend} title="Send">
-          ↑
+          <PaperPlaneIcon size={22} color="#fff" />
         </button>
       </footer>
     </div>
