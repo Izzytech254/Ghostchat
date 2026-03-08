@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAccountStore } from "@/store/accountStore";
 import { deriveStorageKey } from "@/utils/storage";
 import { setStorageKey } from "@/utils/storage";
-import GhostLogo from "@/components/GhostLogo";
+import WhisproLogo from "@/components/WhisproLogo";
 import styles from "./AuthScreen.module.css";
 
 type Step = "landing" | "setup" | "unlock";
@@ -30,8 +30,8 @@ export default function AuthScreen() {
       setError("Username must be at least 2 characters.");
       return;
     }
-    if (passphrase.length < 12) {
-      setError("Passphrase must be at least 12 characters.");
+    if (passphrase.length < 4) {
+      setError("Passphrase must be at least 4 characters.");
       return;
     }
     if (passphrase !== confirm) {
@@ -42,7 +42,6 @@ export default function AuthScreen() {
     setLoading(true);
     try {
       const { key, salt } = await deriveStorageKey(passphrase);
-      // Store salt in localStorage (not secret, just needed for key derivation later)
       localStorage.setItem("gc_salt", btoa(String.fromCharCode(...salt)));
       setStorageKey(key);
       await createAccount(username.trim());
@@ -79,9 +78,11 @@ export default function AuthScreen() {
   return (
     <div className={styles.screen}>
       <div className={styles.card}>
-        <GhostLogo size={100} className={styles.logo} />
-        <h1 className={styles.title}>GhostChat</h1>
-        <p className={styles.sub}>Secure. Ephemeral. Untraceable.</p>
+        <WhisproLogo size={100} className={styles.logo} />
+        <h1 className={styles.title}>
+          Whispro
+        </h1>
+        <p className={styles.sub}>Whisper Without Worry</p>
 
         {step === "landing" && (
           <div className={styles.buttons}>
@@ -110,7 +111,7 @@ export default function AuthScreen() {
               <input
                 className={styles.input}
                 type="text"
-                placeholder="anonymous_ghost"
+                placeholder="anonymous_whisper"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 autoComplete="off"
@@ -118,7 +119,7 @@ export default function AuthScreen() {
             </label>
 
             <label className={styles.label}>
-              Passphrase (12+ characters)
+              Passphrase
               <input
                 className={styles.input}
                 type="password"

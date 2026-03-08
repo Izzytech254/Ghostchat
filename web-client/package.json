@@ -1,11 +1,11 @@
 {
-  "name": "ghostchat-web",
+  "name": "whispro-web",
   "version": "1.0.0",
-  "description": "GhostChat – secure ephemeral messaging web client",
+  "description": "Whispro – Whisper Without Worry secure messaging",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && python3 ../gen_qr.py && cp android/app/build/outputs/apk/debug/app-debug.apk dist/whispro.apk 2>/dev/null; true",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",

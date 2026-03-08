@@ -1,5 +1,5 @@
 /**
- * crypto.ts – GhostChat E2E encryption helpers using WebCrypto API
+ * crypto.ts – Whispro E2E encryption helpers using WebCrypto API
  * ──────────────────────────────────────────────────────────────────
  * Implements a simplified X3DH-like key agreement + AES-256-GCM encryption.
  *
@@ -186,7 +186,7 @@ export async function x3dhInitiate(
     ikmArray = new Uint8Array([...ikmArray, ...dh4]) as Uint8Array<ArrayBuffer>;
   }
 
-  const encryptionKey = await hkdf(ikmArray, "GhostChat v1 X3DH");
+  const encryptionKey = await hkdf(ikmArray, "Whispro v1 X3DH");
 
   return { encryptionKey, ephemeralPublicKey: epkPublic };
 }
@@ -224,7 +224,7 @@ export async function x3dhRespond(
     ikmArray = new Uint8Array([...ikmArray, ...dh4]) as Uint8Array<ArrayBuffer>;
   }
 
-  return hkdf(ikmArray, "GhostChat v1 X3DH");
+  return hkdf(ikmArray, "Whispro v1 X3DH");
 }
 
 // ─── AES-256-GCM encrypt / decrypt ────────────────────────────────────────────

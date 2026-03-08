@@ -3,6 +3,8 @@ import { useChat } from "@/hooks/useChat";
 import { getChat } from "@/utils/storage";
 import MessageBubble from "./MessageBubble";
 import TimerSelector from "./TimerSelector";
+import EmojiPicker from "./EmojiPicker";
+import MediaPicker, { MediaFile } from "./MediaPicker";
 import type { DeletionType, Chat } from "@/types";
 import styles from "./ChatWindow.module.css";
 
@@ -14,47 +16,75 @@ interface Props {
 export default function ChatWindow({ chatId, onBack }: Props) {
   const [chat, setChat] = useState<Chat | null>(null);
   const [text, setText] = useState("");
-  const [ttlMs, setTtlMs] = useState(86_400_000); // 24 h default
+  const [ttlMs, setTtlMs] = useState(86_400_000);
   const [delType, setDelType] = useState<DeletionType>("timed");
   const [screenshotAlert, setScreenshotAlert] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showMediaPicker, setShowMediaPicker] = useState(false);
+  const [mediaPreview, setMediaPreview] = useState<MediaFile | null>(null);
 
   const { messages, sendMessage, onMessageRead } = useChat(chatId);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  // Load chat data to get recipient info
   useEffect(() => {
     getChat(chatId).then(setChat);
   }, [chatId]);
 
-  // Get recipient ID from chat participants
   const recipientId = chat?.participantIds?.[0] ?? "";
 
-  // Auto-scroll on new messages
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages.length]);
 
-  // Screenshot detection (browser API)
   useEffect(() => {
     const handle = () => {
       setScreenshotAlert(true);
       setTimeout(() => setScreenshotAlert(false), 4_000);
     };
-    // visibilitychange is the closest browser-level signal
     document.addEventListener("visibilitychange", handle);
     return () => document.removeEventListener("visibilitychange", handle);
   }, []);
 
   const handleSend = async () => {
     const trimmed = text.trim();
-    if (!trimmed || !recipientId) return;
-    await sendMessage(trimmed, recipientId, ttlMs, delType);
+    if (!trimmed && !mediaPreview) return;
+    if (!recipientId) return;
+
+    if (mediaPreview) {
+      const content = JSON.stringify({
+        type: mediaPreview.type,
+        fileName: mediaPreview.file.name,
+        data: await blobToBase64(mediaPreview.compressed || mediaPreview.file),
+      });
+      await sendMessage(content, recipientId, ttlMs, delType);
+      setMediaPreview(null);
+    }
+
+    if (trimmed) {
+      await sendMessage(trimmed, recipientId, ttlMs, delType);
+    }
     setText("");
+  };
+
+  const handleEmojiSelect = (emoji: string) => {
+    setText((prev) => prev + emoji);
+    setShowEmojiPicker(false);
+  };
+
+  const handleMediaSelect = (media: MediaFile) => {
+    setMediaPreview(media);
+    setShowMediaPicker(false);
+  };
+
+  const clearMedia = () => {
+    if (mediaPreview?.preview) {
+      URL.revokeObjectURL(mediaPreview.preview);
+    }
+    setMediaPreview(null);
   };
 
   return (
     <div className={styles.window}>
-      {/* Header */}
       <header className={styles.header}>
         {onBack && (
           <button className={styles.backBtn} onClick={onBack} title="Back">
@@ -76,11 +106,10 @@ export default function ChatWindow({ chatId, onBack }: Props) {
         </div>
       )}
 
-      {/* Messages */}
       <div className={styles.messages}>
         {messages.length === 0 && (
           <p className={styles.empty}>
-            Messages disappear after their timer expires. 👻
+            Whisper Without Worry ✨
           </p>
         )}
         {messages.map((msg) => (
@@ -93,11 +122,60 @@ export default function ChatWindow({ chatId, onBack }: Props) {
         <div ref={bottomRef} />
       </div>
 
-      {/* Composer */}
+      {mediaPreview && (
+        <div className={styles.mediaPreview}>
+          {mediaPreview.type === "image" && (
+            <img src={mediaPreview.preview} alt="Preview" />
+          )}
+          {mediaPreview.type === "video" && (
+            <video src={mediaPreview.preview} controls />
+          )}
+          {mediaPreview.type === "audio" && (
+            <audio src={mediaPreview.preview} controls />
+          )}
+          <button className={styles.clearMedia} onClick={clearMedia}>×</button>
+        </div>
+      )}
+
+      <div style={{ position: "relative" }}>
+        {showEmojiPicker && (
+          <div className={styles.pickerContainer}>
+            <EmojiPicker
+              onSelect={handleEmojiSelect}
+              onClose={() => setShowEmojiPicker(false)}
+            />
+          </div>
+        )}
+        {showMediaPicker && (
+          <div className={styles.pickerContainer}>
+            <MediaPicker
+              onSelect={handleMediaSelect}
+              onClose={() => setShowMediaPicker(false)}
+            />
+          </div>
+        )}
+      </div>
+
       <footer className={styles.composer}>
+        <div className={styles.attachments}>
+          <button
+            className={styles.attachBtn}
+            onClick={() => setShowMediaPicker(!showMediaPicker)}
+            title="Media"
+          >
+            📎
+          </button>
+          <button
+            className={styles.attachBtn}
+            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            title="Emoji"
+          >
+            😊
+          </button>
+        </div>
         <textarea
           className={styles.textarea}
-          placeholder="Type a ghosted message…"
+          placeholder="Message..."
           rows={1}
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -114,4 +192,13 @@ export default function ChatWindow({ chatId, onBack }: Props) {
       </footer>
     </div>
   );
+}
+
+function blobToBase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
 }

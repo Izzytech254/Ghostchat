@@ -1,0 +1,182 @@
+.screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #0a0a0f 0%, #000000 50%, #0a0a0f 100%);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.bgGlow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+  animation: pulseGlow 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.bgGlow2 {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  bottom: -100px;
+  right: -100px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 60%);
+  animation: pulseGlow2 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+  50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+}
+
+@keyframes pulseGlow2 {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.2); }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  z-index: 1;
+}
+
+.logoContainer {
+  transform: translateY(0) scale(1);
+  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: logoFloat 3s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.logoContainer.logoUp {
+  transform: translateY(-40px) scale(0.85);
+}
+
+.sloganContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.wordWrapper {
+  display: block;
+  overflow: hidden;
+}
+
+.word {
+  display: block;
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(60px);
+}
+
+.word1 {
+  color: #ffffff;
+  animation: wordAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: 0.7s;
+}
+
+.word2 {
+  color: #ffffff;
+  animation: wordAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: 0.9s;
+}
+
+.wordAccent {
+  background: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: wordAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, glowText 2s ease-in-out infinite;
+  animation-delay: 1.1s, 1.7s;
+}
+
+@keyframes wordAppear {
+  0% { opacity: 0; transform: translateY(60px) scale(0.8); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes glowText {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5)); }
+  50% { filter: drop-shadow(0 0 25px rgba(59, 130, 246, 0.8)); }
+}
+
+.sloganVisible .word {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tagline {
+  font-size: 14px;
+  color: #71717a;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+  letter-spacing: 2px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+  transition-delay: 0.3s;
+}
+
+.taglineVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  font-size: 20px;
+  color: rgba(59, 130, 246, 0.3);
+  animation: float 6s ease-in-out infinite;
+}
+
+.particle:nth-child(1) { top: 20%; left: 15%; animation-delay: 0s; }
+.particle:nth-child(2) { top: 30%; right: 20%; animation-delay: 1s; }
+.particle:nth-child(3) { bottom: 25%; left: 25%; animation-delay: 2s; }
+.particle:nth-child(4) { bottom: 35%; right: 15%; animation-delay: 3s; }
+.particle:nth-child(5) { top: 50%; left: 10%; animation-delay: 4s; }
+
+@keyframes float {
+  0%, 100% { opacity: 0.2; transform: translateY(0) rotate(0deg); }
+  50% { opacity: 0.6; transform: translateY(-20px) rotate(180deg); }
+}
+
+@media (max-width: 480px) {
+  .word {
+    font-size: 32px;
+    letter-spacing: 2px;
+  }
+  
+  .logoContainer {
+    transform: scale(0.85);
+  }
+  
+  .logoContainer.logoUp {
+    transform: translateY(-30px) scale(0.7);
+  }
+}

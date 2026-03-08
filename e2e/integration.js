@@ -271,7 +271,7 @@ async function relayServerSuite() {
 // ─── Runner ───────────────────────────────────────────────────────────────────
 
 (async () => {
-  console.log("GhostChat E2E Integration Tests");
+  console.log("Whispro E2E Integration Tests");
   console.log(`  Relay:      ${RELAY_WS_URL}`);
   console.log(`  Key server: ${KEY_SERVER_URL}`);
 

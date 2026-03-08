@@ -106,7 +106,7 @@ async function kdfRK(
   rk: ArrayBuffer,
   dhOut: ArrayBuffer,
 ): Promise<{ newRK: ArrayBuffer; ck: ArrayBuffer }> {
-  const out = await hkdf2(dhOut, rk, "GhostChatDR_RootKDF_v1", 64);
+  const out = await hkdf2(dhOut, rk, "WhisproDR_RootKDF_v1", 64);
   return {
     newRK: out.slice(0, 32),
     ck: out.slice(32, 64),

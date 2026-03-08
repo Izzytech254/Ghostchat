@@ -10,7 +10,7 @@ import { openDB, type IDBPDatabase } from "idb";
 import type { Message, Chat, Contact, Account } from "@/types";
 import { b64Encode, b64Decode } from "./crypto";
 
-const DB_NAME = "ghostchat";
+const DB_NAME = "whispro";
 
 /**
  * Bump DB_VERSION whenever you add a new migration below.

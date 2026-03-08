@@ -1,4 +1,4 @@
-# 👻 GhostChat
+# � Whispro
 
 > Secure. Ephemeral. Anonymous. Messages disappear without a trace.
 
@@ -35,7 +35,7 @@ packets. It cannot read content, sender identity, or metadata.
 ## Project structure
 
 ```
-Ghost/
+Whispro/
 ├── backend/               Node.js WebSocket relay server
 │   ├── src/
 │   │   ├── server.js
@@ -99,7 +99,7 @@ Ghost/
 
 ```bash
 git clone <repo>
-cd Ghost
+cd Whispro
 docker compose up --build
 ```
 

@@ -1,54 +1,57 @@
 .container {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .select {
-  background: rgba(0, 0, 0, 0.8);
-  border: 1px solid rgba(0, 255, 128, 0.4);
-  border-radius: 0;
-  color: var(--accent);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #a1a1aa;
   font-size: 12px;
-  font-family: "JetBrains Mono", monospace;
-  padding: 8px 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  padding: 6px 10px;
   cursor: pointer;
   outline: none;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
+
 .select:hover {
-  border-color: var(--accent);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #fff;
 }
+
 .select:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 15px rgba(0, 255, 128, 0.3);
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.08);
 }
 
 .delTypes {
   display: flex;
-  gap: 6px;
+  gap: 4px;
 }
 
 .delBtn {
   background: transparent;
-  border: 1px solid rgba(0, 255, 128, 0.3);
-  border-radius: 0;
-  color: rgba(0, 255, 128, 0.5);
-  font-size: 12px;
-  font-family: "JetBrains Mono", monospace;
-  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: #71717a;
+  font-size: 11px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  padding: 5px 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .delBtn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #a1a1aa;
 }
+
 .delBtn.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #000;
-  font-weight: 600;
-  box-shadow: 0 0 15px rgba(0, 255, 128, 0.4);
+  background: rgba(59, 130, 246, 0.15);
+  border-color: #3b82f6;
+  color: #3b82f6;
+  font-weight: 500;
 }

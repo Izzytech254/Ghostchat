@@ -49,7 +49,7 @@ export function useChat(chatId: string) {
       if (!account) return;
 
       console.log(
-        "[GhostChat] Sending message to:",
+        "[Whispro] Sending message to:",
         recipientId,
         "from:",
         account.id,

@@ -261,7 +261,7 @@ describe("Offline queue", () => {
 
     alice.sendJSON({
       type: "MESSAGE",
-      to: "ghost-user",
+      to: "whispro-user",
       id: "queued-expire",
       content: "enc-expire",
       expiresAt: Date.now() + 60_000,
@@ -273,18 +273,18 @@ describe("Offline queue", () => {
     // Evict everything
     srv.queueManager.evictExpired(0);
 
-    const ghost = await connect(srv.port);
-    ghost.sendJSON({ type: "REGISTER", userId: "ghost-user", deviceId: "d1" });
+    const whispro = await connect(srv.port);
+    whispro.sendJSON({ type: "REGISTER", userId: "whispro-user", deviceId: "d1" });
 
     // No queued messages → only REGISTERED, no MESSAGE follows
-    const reg = await ghost.next();
+    const reg = await whispro.next();
     expect(reg.type).toBe("REGISTERED");
     expect(reg.queued).toBe(0);
 
     // No stray messages expected
-    const stray = await ghost.next(300).catch(() => null);
+    const stray = await whispro.next(300).catch(() => null);
     expect(stray).toBeNull();
-    ghost.close();
+    whispro.close();
   });
 });
 

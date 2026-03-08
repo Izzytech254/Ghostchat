@@ -1,6 +1,6 @@
 /**
- * GhostLogo – Ethereal floating ghost SVG logo
- * Spectral, translucent, misty aesthetic
+ * GhostLogo – Brand icon mark: clean sky-blue ghost
+ * Minimal, modern – same design language as Telegram / WhatsApp app marks.
  */
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function GhostLogo({
-  size = 120,
+  size = 80,
   className = "",
   animated = true,
 }: Props) {
@@ -18,219 +18,79 @@ export default function GhostLogo({
     <svg
       width={size}
       height={size}
-      viewBox="0 0 120 120"
+      viewBox="0 0 100 100"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      style={{
-        filter: "drop-shadow(0 0 18px rgba(196, 181, 253, 0.45))",
-        display: "block",
-      }}
+      style={{ display: "block" }}
     >
-      <defs>
-        {/* Outer ethereal aura */}
-        <radialGradient id="aura" cx="50%" cy="45%" r="55%">
-          <stop offset="0%" stopColor="rgba(196,181,253,0.12)" />
-          <stop offset="100%" stopColor="rgba(196,181,253,0)" />
-        </radialGradient>
-
-        {/* Ghost body fill – translucent misty */}
-        <linearGradient id="bodyFill" x1="50%" y1="0%" x2="50%" y2="100%">
-          <stop offset="0%" stopColor="rgba(220,215,255,0.18)" />
-          <stop offset="60%" stopColor="rgba(180,165,240,0.10)" />
-          <stop offset="100%" stopColor="rgba(140,125,210,0.05)" />
-        </linearGradient>
-
-        {/* Eye glow */}
-        <radialGradient id="eyeGlow" cx="50%" cy="40%" r="55%">
-          <stop offset="0%" stopColor="rgba(255,255,255,0.95)" />
-          <stop offset="60%" stopColor="rgba(220,210,255,0.7)" />
-          <stop offset="100%" stopColor="rgba(196,181,253,0)" />
-        </radialGradient>
-
-        {/* Wisp gradient */}
-        <radialGradient id="wispGrad" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="rgba(210,200,255,0.45)" />
-          <stop offset="100%" stopColor="rgba(196,181,253,0)" />
-        </radialGradient>
-
-        {/* Spectral glow filter */}
-        <filter id="spectralGlow" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="2.5" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-
-        {/* Eye bloom filter */}
-        <filter id="eyeBloom" x="-80%" y="-80%" width="260%" height="260%">
-          <feGaussianBlur stdDeviation="2" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-
-        {animated && (
+      {animated && (
+        <defs>
           <style>{`
-            @keyframes ghostFloat {
-              0%, 100% { transform: translateY(0px); }
-              50%       { transform: translateY(-7px); }
+            @keyframes gcFloat {
+              0%, 100% { transform: translateY(0); }
+              50%       { transform: translateY(-6px); }
             }
-            @keyframes ghostBreath {
-              0%, 100% { opacity: 0.82; }
-              50%       { opacity: 1; }
+            @keyframes gcBlink {
+              0%, 90%, 100% { transform: scaleY(1); }
+              95%           { transform: scaleY(0.1); }
             }
-            @keyframes eyeShimmer {
-              0%, 100% { opacity: 0.85; }
-              40%       { opacity: 1; }
-              60%       { opacity: 0.55; }
-              70%       { opacity: 1; }
-            }
-            @keyframes wispDrift {
-              0%, 100% { opacity: 0.3; transform: translateY(0) scale(1); }
-              50%       { opacity: 0.65; transform: translateY(-5px) scale(1.06); }
-            }
-            .gc-ghost-body  { animation: ghostFloat 4s ease-in-out infinite, ghostBreath 4s ease-in-out infinite; }
-            .gc-ghost-eye   { animation: eyeShimmer 3.5s ease-in-out infinite; }
-            .gc-eye-r       { animation-delay: 0.4s; }
-            .gc-wisp-l      { animation: wispDrift 5s ease-in-out infinite; }
-            .gc-wisp-r      { animation: wispDrift 5s ease-in-out infinite 1.2s; }
-            .gc-wisp-t      { animation: wispDrift 6s ease-in-out infinite 2.4s; }
+            .gc-body  { animation: gcFloat 3.6s ease-in-out infinite; transform-origin: 50% 50%; }
+            .gc-eye-l { animation: gcBlink 4s ease-in-out infinite 0s; transform-origin: 36px 47px; }
+            .gc-eye-r { animation: gcBlink 4s ease-in-out infinite 0.15s; transform-origin: 64px 47px; }
           `}</style>
-        )}
-      </defs>
+        </defs>
+      )}
 
-      {/* Ambient ethereal aura */}
-      <ellipse cx="60" cy="68" rx="40" ry="32" fill="url(#aura)" />
+      <g className={animated ? "gc-body" : ""}>
 
-      {/* ── Ghost body ── */}
-      <g className="gc-ghost-body" filter="url(#spectralGlow)">
-        {/* Outer body – dome top with wavy bottom */}
+        {/* ── Ghost body ── */}
+        {/* Main dome + torso */}
         <path
           d="
-            M 30 65
-            C 30 40 42 22 60 22
-            C 78 22 90 40 90 65
-            L 90 90
-            C 86 87 82 94 78 88
-            C 74 82 70 89 66 84
-            C 62 79 58 84 54 88
-            C 50 92 46 85 42 88
-            C 38 91 34 86 30 90
+            M 50 14
+            C 31 14, 18 27, 18 44
+            L 18 80
+            C 22 77, 27 80, 31 77
+            C 35 74, 39 78, 43 75
+            C 47 72, 52 75, 56 78
+            C 60 75, 64 72, 68 75
+            C 72 78, 76 74, 80 77
+            C 84 80, 84 80, 82 76
+            L 82 44
+            C 82 27, 69 14, 50 14
             Z
           "
-          fill="url(#bodyFill)"
-          stroke="rgba(210,200,255,0.45)"
-          strokeWidth="1.2"
+          fill="#38bdf8"
         />
 
-        {/* Inner sheen highlight */}
-        <path
-          d="
-            M 40 60 C 40 44 48 31 60 28 C 72 31 80 44 80 60
-            L 80 72 C 77 70 74 74 71 70 C 68 66 65 71 62 68
-            C 59 65 56 70 53 68 C 50 66 46 70 43 68 Z
-          "
-          fill="rgba(230,225,255,0.06)"
-          stroke="none"
-        />
-
-        {/* ── Left eye ── */}
-        <g className="gc-ghost-eye" filter="url(#eyeBloom)">
-          <ellipse cx="47" cy="57" rx="7" ry="8.5" fill="rgba(12,10,28,0.88)" />
-          <ellipse
-            cx="47"
-            cy="55.5"
-            rx="5"
-            ry="6"
-            fill="url(#eyeGlow)"
-            opacity="0.9"
-          />
-          <ellipse
-            cx="48.5"
-            cy="53.5"
-            rx="1.8"
-            ry="2.2"
-            fill="rgba(255,255,255,0.95)"
-          />
-        </g>
-
-        {/* ── Right eye ── */}
-        <g className="gc-ghost-eye gc-eye-r" filter="url(#eyeBloom)">
-          <ellipse cx="73" cy="57" rx="7" ry="8.5" fill="rgba(12,10,28,0.88)" />
-          <ellipse
-            cx="73"
-            cy="55.5"
-            rx="5"
-            ry="6"
-            fill="url(#eyeGlow)"
-            opacity="0.9"
-          />
-          <ellipse
-            cx="74.5"
-            cy="53.5"
-            rx="1.8"
-            ry="2.2"
-            fill="rgba(255,255,255,0.95)"
-          />
-        </g>
-
-        {/* Subtle mouth */}
-        <path
-          d="M 52 70 Q 60 73.5 68 70"
-          stroke="rgba(196,181,253,0.3)"
-          strokeWidth="1"
-          fill="none"
-          strokeLinecap="round"
-        />
-      </g>
-
-      {/* ── Floating wisps ── */}
-      <g className="gc-wisp-l">
-        <ellipse cx="20" cy="56" rx="5.5" ry="3" fill="url(#wispGrad)" />
+        {/* Subtle inner highlight – top specular gloss */}
         <ellipse
-          cx="13"
-          cy="63"
-          rx="3.5"
-          ry="2"
-          fill="url(#wispGrad)"
-          opacity="0.6"
+          cx="44"
+          cy="30"
+          rx="13"
+          ry="8"
+          fill="rgba(255,255,255,0.18)"
+          transform="rotate(-20 44 30)"
         />
-      </g>
 
-      <g className="gc-wisp-r">
-        <ellipse cx="100" cy="53" rx="5.5" ry="3" fill="url(#wispGrad)" />
+        {/* ── Eyes ── */}
         <ellipse
-          cx="107"
-          cy="61"
-          rx="3"
-          ry="2"
-          fill="url(#wispGrad)"
-          opacity="0.6"
+          cx="36" cy="47" rx="7" ry="8"
+          fill="#000e1a"
+          className={animated ? "gc-eye-l" : ""}
         />
-      </g>
-
-      <g className="gc-wisp-t">
         <ellipse
-          cx="60"
-          cy="12"
-          rx="4.5"
-          ry="2.5"
-          fill="url(#wispGrad)"
-          opacity="0.5"
+          cx="64" cy="47" rx="7" ry="8"
+          fill="#000e1a"
+          className={animated ? "gc-eye-r" : ""}
         />
-      </g>
 
-      {/* Mist particles */}
-      <circle cx="25" cy="40" r="1.5" fill="rgba(196,181,253,0.22)" />
-      <circle cx="96" cy="46" r="1.2" fill="rgba(196,181,253,0.2)" />
-      <circle cx="18" cy="74" r="1" fill="rgba(196,181,253,0.18)" />
-      <circle cx="103" cy="71" r="1.3" fill="rgba(196,181,253,0.2)" />
-      <circle cx="60" cy="109" r="1.8" fill="rgba(196,181,253,0.14)" />
-      <circle cx="40" cy="104" r="1" fill="rgba(196,181,253,0.11)" />
-      <circle cx="80" cy="106" r="1.2" fill="rgba(196,181,253,0.12)" />
+        {/* Eye shine */}
+        <circle cx="39" cy="44" r="2.5" fill="rgba(255,255,255,0.75)" />
+        <circle cx="67" cy="44" r="2.5" fill="rgba(255,255,255,0.75)" />
+
+      </g>
     </svg>
   );
 }

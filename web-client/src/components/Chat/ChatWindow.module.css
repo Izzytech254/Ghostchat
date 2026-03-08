@@ -2,15 +2,27 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: rgba(0, 0, 0, 0.95);
+  background:
+    radial-gradient(
+      ellipse at 20% 0%,
+      rgba(59, 130, 246, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 100%,
+      rgba(59, 130, 246, 0.05) 0%,
+      transparent 50%
+    ),
+    linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+  position: relative;
 }
 
 .backBtn {
   display: none;
   background: none;
   border: none;
-  color: var(--accent);
-  font-size: 22px;
+  color: #3b82f6;
+  font-size: 20px;
   cursor: pointer;
   padding: 4px 10px 4px 0;
   border-radius: 0;
@@ -31,44 +43,36 @@
   align-items: center;
   justify-content: space-between;
   padding: 14px 18px;
-  border-bottom: 1px solid rgba(0, 255, 128, 0.2);
-  background: rgba(0, 0, 0, 0.95);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(10px);
   flex-shrink: 0;
   position: relative;
 }
-.header::before {
-  content: "[SECURE_CHANNEL]";
-  position: absolute;
-  right: 18px;
-  font-size: 9px;
-  color: rgba(0, 255, 128, 0.3);
-  font-family: "JetBrains Mono", monospace;
-  letter-spacing: 1px;
-}
 
 .peerName {
-  font-weight: 700;
+  font-weight: 600;
   font-size: 15px;
-  letter-spacing: 1px;
-  color: var(--accent);
-  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0.3px;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
 }
+
 .peerName::before {
   content: "@ ";
   opacity: 0.5;
 }
 
 .alert {
-  background: rgba(255, 200, 0, 0.2);
-  color: #ffc800;
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
   text-align: center;
   padding: 8px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   animation: fadeIn 200ms ease;
   flex-shrink: 0;
-  font-family: "JetBrains Mono", monospace;
-  border-bottom: 1px solid rgba(255, 200, 0, 0.3);
+  border-bottom: 1px solid rgba(245, 158, 11, 0.2);
 }
 
 .messages {
@@ -77,93 +81,204 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)),
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 255, 128, 0.03) 2px,
-      rgba(0, 255, 128, 0.03) 4px
-    );
+  gap: 6px;
+  background: transparent;
 }
 
 .empty {
   text-align: center;
-  color: rgba(0, 255, 128, 0.3);
-  font-size: 12px;
+  color: rgba(59, 130, 246, 0.4);
+  font-size: 13px;
   margin-top: auto;
   margin-bottom: auto;
-  font-family: "JetBrains Mono", monospace;
-}
-.empty::before {
-  content: "// ";
 }
 
 .composer {
   display: flex;
   align-items: flex-end;
-  gap: 10px;
-  padding: 14px 16px;
-  border-top: 1px solid rgba(0, 255, 128, 0.2);
-  background: rgba(0, 0, 0, 0.95);
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(59, 130, 246, 0.15);
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(10px);
   flex-shrink: 0;
-  padding-bottom: max(14px, env(safe-area-inset-bottom));
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
 }
 
 .textarea {
   flex: 1;
-  background: rgba(0, 0, 0, 0.8);
-  border: 1px solid rgba(0, 255, 128, 0.4);
-  border-radius: 0;
-  padding: 12px 14px;
-  color: var(--accent);
-  font-family: "JetBrains Mono", "Fira Code", monospace;
-  font-size: 13px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  padding: 12px 16px;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-size: 14px;
   resize: none;
   outline: none;
   max-height: 120px;
   overflow-y: auto;
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 @media (max-width: 640px) {
   .textarea {
-    font-size: 16px; /* prevents iOS auto-zoom */
+    font-size: 16px;
   }
   .sendBtn {
-    width: 44px;
-    height: 44px;
-    font-size: 18px;
+    width: 40px;
+    height: 40px;
   }
 }
+
 .textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 20px rgba(0, 255, 128, 0.3);
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.08);
 }
+
 .textarea::placeholder {
-  color: rgba(0, 255, 128, 0.3);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .sendBtn {
-  background: transparent;
-  border: 2px solid var(--accent);
-  border-radius: 0;
-  width: 44px;
-  height: 44px;
-  color: var(--accent);
-  font-size: 18px;
-  font-weight: 700;
+  background: #3b82f6;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  color: #fff;
+  font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .sendBtn:hover {
-  background: var(--accent);
-  color: #000;
-  box-shadow: 0 0 20px rgba(0, 255, 128, 0.5);
+  background: #2563eb;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
 }
+
 .sendBtn:active {
-  transform: scale(0.95);
+  transform: scale(0.92);
+}
+
+.attachments {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-left: 4px;
+}
+
+.attachBtn {
+  background: none;
+  border: none;
+  color: #71717a;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.attachBtn:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.pickerContainer {
+  position: absolute;
+  bottom: 100%;
+  left: 8px;
+  right: 8px;
+  z-index: 100;
+  margin-bottom: 8px;
+  animation: slideUpPicker 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  justify-content: flex-start;
+}
+
+@keyframes slideUpPicker {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mediaPreview {
+  position: relative;
+  padding: 0 16px 8px;
+  animation: fadeIn 200ms ease;
+}
+
+.mediaPreview img {
+  max-width: 200px;
+  max-height: 150px;
+  border-radius: 12px;
+  border: 2px solid rgba(59, 130, 246, 0.3);
+}
+
+.mediaPreview video {
+  max-width: 250px;
+  max-height: 180px;
+  border-radius: 12px;
+  border: 2px solid rgba(59, 130, 246, 0.3);
+}
+
+.mediaPreview audio {
+  max-width: 250px;
+  height: 40px;
+  border-radius: 20px;
+}
+
+.clearMedia {
+  position: absolute;
+  top: 4px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: #fff;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clearMedia:hover {
+  background: rgba(239, 68, 68, 0.8);
 }

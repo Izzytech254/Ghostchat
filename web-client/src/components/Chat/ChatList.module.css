@@ -3,56 +3,61 @@
   flex-direction: column;
   flex: 1;
   overflow: hidden;
-  background: rgba(0, 0, 0, 0.9);
+  background: transparent;
 }
 
 .newChat {
   display: flex;
   gap: 8px;
   padding: 12px 14px;
-  border-bottom: 1px solid rgba(0, 255, 128, 0.2);
-  background: rgba(0, 0, 0, 0.95);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+  background: rgba(10, 10, 10, 0.5);
 }
 
 .input {
   flex: 1;
-  background: rgba(0, 0, 0, 0.8);
-  border: 1px solid rgba(0, 255, 128, 0.4);
-  border-radius: 0;
-  padding: 10px 12px;
-  color: var(--accent);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  padding: 10px 14px;
+  color: #fff;
   font-size: 13px;
-  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
   outline: none;
   transition: all 0.2s ease;
 }
+
 .input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 15px rgba(0, 255, 128, 0.3);
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.06);
 }
+
 .input::placeholder {
-  color: rgba(0, 255, 128, 0.3);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .addBtn {
-  background: transparent;
-  border: 2px solid var(--accent);
-  border-radius: 0;
-  color: var(--accent);
-  font-size: 20px;
-  line-height: 1;
-  padding: 0 14px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 18px;
+  width: 38px;
+  height: 38px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .addBtn:hover {
-  background: var(--accent);
-  color: #000;
-  box-shadow: 0 0 20px rgba(0, 255, 128, 0.5);
+  background: #2563eb;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
 }
+
 .addBtn:active {
-  transform: scale(0.95);
+  transform: scale(0.92);
 }
 
 .list {
@@ -66,72 +71,48 @@
 .item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
+  gap: 12px;
+  padding: 14px 16px;
   cursor: pointer;
-  border-bottom: 1px solid rgba(0, 255, 128, 0.1);
-  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: all 0.15s ease;
   touch-action: manipulation;
-  position: relative;
 }
 
 @media (max-width: 640px) {
   .item {
-    padding: 14px 16px;
+    padding: 16px;
   }
   .avatar {
-    width: 44px;
-    height: 44px;
-    font-size: 17px;
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
   }
 }
+
 .item:hover {
-  background: rgba(0, 255, 128, 0.05);
+  background: rgba(59, 130, 246, 0.05);
 }
+
 .item.active {
-  background: rgba(0, 255, 128, 0.1);
-  border-left: 3px solid var(--accent);
-  box-shadow: inset 3px 0 15px rgba(0, 255, 128, 0.1);
-}
-.item::before {
-  content: ">";
-  position: absolute;
-  left: 4px;
-  color: var(--accent);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  font-family: "JetBrains Mono", monospace;
-}
-.item:hover::before,
-.item.active::before {
-  opacity: 1;
+  background: rgba(59, 130, 246, 0.1);
 }
 
 .avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 0;
-  background: rgba(0, 255, 128, 0.1);
-  border: 1px solid rgba(0, 255, 128, 0.4);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(37, 99, 235, 0.2) 100%);
+  border: 2px solid rgba(59, 130, 246, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 16px;
   flex-shrink: 0;
-  color: var(--accent);
-  font-family: "JetBrains Mono", monospace;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
   position: relative;
-}
-.avatar::after {
-  content: "";
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  width: 4px;
-  height: 4px;
-  background: var(--accent);
-  box-shadow: 0 0 6px var(--accent);
 }
 
 .info {
@@ -140,39 +121,38 @@
   flex: 1;
   overflow: hidden;
 }
+
 .row {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
 }
+
 .name {
   font-weight: 600;
   font-size: 14px;
-  color: var(--accent);
-  font-family: "JetBrains Mono", monospace;
+  color: #fff;
 }
 
 .time {
-  font-size: 10px;
-  color: rgba(0, 255, 128, 0.4);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
   white-space: nowrap;
-  font-family: "JetBrains Mono", monospace;
 }
 
 .preview {
-  font-size: 11px;
-  color: rgba(0, 255, 128, 0.5);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-family: "JetBrains Mono", monospace;
+  margin-top: 2px;
 }
 
 .error {
   padding: 8px 14px;
   font-size: 12px;
-  color: #ff4444;
-  background: rgba(255, 68, 68, 0.1);
-  border-bottom: 1px solid rgba(255, 68, 68, 0.3);
-  font-family: "JetBrains Mono", monospace;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  border-bottom: 1px solid rgba(239, 68, 68, 0.2);
 }

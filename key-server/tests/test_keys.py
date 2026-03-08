@@ -170,7 +170,7 @@ async def test_get_keys_consumes_otk(client):
 
 @pytest.mark.asyncio
 async def test_get_keys_not_found(client):
-    r = await client.get("/keys/ghost_nobody_xyz")
+    r = await client.get("/keys/whispro_nobody_xyz")
     assert r.status_code == 404
 
 

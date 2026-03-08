@@ -7,7 +7,6 @@ POST   /keys/{user_id}/otk    – Upload additional one-time pre-keys
 DELETE /keys/{user_id}        – Delete all keys (account deletion / key revocation)
 GET    /keys/{user_id}/count  – Return remaining OTK count
 """
-from __future__ import annotations
 
 import json
 import logging
@@ -17,11 +16,12 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from cryptography.exceptions import InvalidSignature
-from fastapi import APIRouter, Depends, HTTPException, Header
+from fastapi import APIRouter, Body, Depends, HTTPException, Header, Request
 
 from app.config import settings
 from app.models import KeyBundleUpload, KeyBundleResponse, UploadOTKRequest
 from app.redis_client import get_redis
+from app.limiter import limiter
 
 log    = logging.getLogger("key_server.keys")
 router = APIRouter()
@@ -65,8 +65,10 @@ def _verify_signed_pre_key(identity_key_b64: str, signed_pre_key_b64: str, sig_b
 # ── Routes ─────────────────────────────────────────────────────────────────────
 
 @router.post("/register", status_code=201)
+@limiter.limit("10/hour")
 async def register_keys(
-    bundle: KeyBundleUpload,
+    request: Request,
+    bundle: KeyBundleUpload = Body(...),
     redis=Depends(get_redis),
 ):
     """
@@ -121,7 +123,9 @@ async def register_keys(
 
 
 @router.get("/{user_id}", response_model=KeyBundleResponse)
+@limiter.limit("200/hour")
 async def get_keys(
+    request: Request,
     user_id: str,
     redis=Depends(get_redis),
 ):
@@ -225,7 +229,9 @@ async def delete_keys(
 
 
 @router.get("/lookup/{username}")
+@limiter.limit("100/hour")
 async def lookup_user(
+    request: Request,
     username: str,
     redis=Depends(get_redis),
 ):

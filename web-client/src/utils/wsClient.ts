@@ -1,7 +1,7 @@
 /**
  * wsClient.ts – WebSocket relay client
  * ──────────────────────────────────────
- * Manages connection to the GhostChat relay server.
+ * Manages connection to the Whispro relay server.
  * Implements exponential back-off reconnection.
  */
 

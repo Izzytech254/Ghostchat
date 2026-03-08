@@ -1,25 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
-import fs from "fs";
 
 export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: { "@": resolve(__dirname, "src") },
   },
-  test: {
-    environment: "jsdom",
-    globals: true,
-  },
   server: {
     port: 5173,
-    https: fs.existsSync(resolve(__dirname, "certs/key.pem"))
-      ? {
-          key: fs.readFileSync(resolve(__dirname, "certs/key.pem")),
-          cert: fs.readFileSync(resolve(__dirname, "certs/cert.pem")),
-        }
-      : undefined,
+    host: "0.0.0.0",
     proxy: {
       "/keys": {
         target: "http://localhost:8000",
@@ -31,5 +21,9 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+  },
+  preview: {
+    port: 8082,
+    host: "0.0.0.0",
   },
 });

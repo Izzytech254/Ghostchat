@@ -1,0 +1,163 @@
+.picker {
+  background: rgba(30, 30, 35, 0.98);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  height: auto;
+  max-height: 240px;
+  width: auto;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+}
+
+.categories {
+  display: flex;
+  gap: 2px;
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  background: rgba(25, 25, 30, 0.95);
+  flex-shrink: 0;
+}
+
+.categories::-webkit-scrollbar {
+  display: none;
+}
+
+.categoryBtn {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.categoryBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.categoryBtn.active {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.categoryIcon {
+  font-size: 18px;
+}
+
+.categoryBtn:hover .categoryIcon {
+  transform: scale(1.1);
+}
+
+.categoryBtn.active .categoryIcon {
+  transform: scale(1.05);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 1px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  padding: 4px 6px 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(59, 130, 246, 0.2) transparent;
+}
+
+.grid::-webkit-scrollbar {
+  width: 3px;
+}
+
+.grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.grid::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.2);
+  border-radius: 3px;
+}
+
+.emoji {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+.emoji:hover {
+  background: rgba(255, 255, 255, 0.08);
+  animation: emojiPop 0.4s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
+}
+
+.emoji:active {
+  animation: emojiClick 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  background: rgba(59, 130, 246, 0.15);
+}
+
+@keyframes emojiPop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
+
+@keyframes emojiClick {
+  0% {
+    transform: scale(1.2);
+  }
+  40% {
+    transform: scale(0.85);
+  }
+  100% {
+    transform: scale(1.15) rotate(-8deg);
+  }
+}
+
+@keyframes emojiBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-3px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(-1.5px);
+  }
+}
+
+@media (max-width: 400px) {
+  .grid {
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .emoji {
+    font-size: 24px;
+  }
+}

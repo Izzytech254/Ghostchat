@@ -12,6 +12,7 @@ const { SessionManager } = require("./handlers/session");
 const { QueueManager } = require("./handlers/queue");
 const { CleanupTask } = require("./utils/cleanup");
 const { validatePacket } = require("./middleware/validate");
+const { checkRateLimit } = require("./middleware/rateLimiter");
 
 // ─── Logger ──────────────────────────────────────────────────────────────────
 const log = pino({
@@ -76,6 +77,13 @@ wss.on("connection", (ws, req) => {
       return;
     }
 
+    const rateErr = checkRateLimit(packet, remoteIp);
+    if (rateErr) {
+      ws.send(JSON.stringify({ type: "ERROR", ...rateErr }));
+      log.warn({ remoteIp, packetType: packet.type }, "Rate limit exceeded");
+      return;
+    }
+
     relayHandler.handle(ws, packet);
   });
 
@@ -120,5 +128,5 @@ httpServer.listen(HTTP_PORT, () =>
 const wsOnly = new WebSocket.Server({ port: PORT });
 wsOnly.on("connection", (ws, req) => wss.emit("connection", ws, req));
 
-log.info({ port: PORT }, "GhostChat relay WebSocket server running");
+log.info({ port: PORT }, "Whispro relay WebSocket server running");
 log.info("Server is DUMB – routes encrypted packets only, never reads content");

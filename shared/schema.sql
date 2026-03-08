@@ -1,5 +1,5 @@
 -- ============================================================
--- GhostChat Local Schema (SQLite – encrypted on device)
+-- Whispro Local Schema (SQLite – encrypted on device)
 -- ============================================================
 -- This schema runs on the USER'S DEVICE only via SQLite.
 -- Nothing here is ever sent to a server.

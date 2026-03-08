@@ -8,8 +8,9 @@ import clsx from "clsx";
 import ChatList from "@/components/Chat/ChatList";
 import ChatWindow from "@/components/Chat/ChatWindow";
 import AuthScreen from "@/components/Auth/AuthScreen";
+import WelcomeScreen from "@/components/Auth/WelcomeScreen";
 import SettingsPanel from "@/components/Settings/SettingsPanel";
-import GhostLogo from "@/components/GhostLogo";
+import WhisproLogo from "@/components/WhisproLogo";
 import type { WsInboundPacket, Message } from "@/types";
 import styles from "./App.module.css";
 
@@ -21,11 +22,25 @@ export default function App() {
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [view, setView] = useState<View>("chat");
   const [chatRefreshKey, setChatRefreshKey] = useState(0);
+  const [showWelcome, setShowWelcome] = useState(false);
+  const [hasSeenWelcome, setHasSeenWelcome] = useState(false);
 
   // Load account from IndexedDB on startup
   useEffect(() => {
     loadAccount();
   }, []);
+
+  // Show welcome screen after first unlock
+  useEffect(() => {
+    if (account && isUnlocked && !hasSeenWelcome) {
+      setShowWelcome(true);
+      setHasSeenWelcome(true);
+    }
+  }, [account, isUnlocked, hasSeenWelcome]);
+
+  const handleWelcomeComplete = () => {
+    setShowWelcome(false);
+  };
 
   // Connect WebSocket once account is available
   useEffect(() => {
@@ -40,7 +55,7 @@ export default function App() {
         })();
 
       console.log(
-        "[GhostChat] Connecting WebSocket as:",
+        "[Whispro] Connecting WebSocket as:",
         account.id,
         "username:",
         account.username,
@@ -55,7 +70,7 @@ export default function App() {
     if (!account || !isUnlocked) return;
 
     const handleMessage = async (packet: WsInboundPacket) => {
-      console.log("[GhostChat] WS Packet received:", packet);
+      console.log("[Whispro] WS Packet received:", packet);
 
       if (packet.type !== "MESSAGE") return;
 
@@ -112,12 +127,19 @@ export default function App() {
     return <AuthScreen />;
   }
 
+  if (showWelcome) {
+    return <WelcomeScreen onComplete={handleWelcomeComplete} />;
+  }
+
   return (
     <div className={clsx(styles.app, activeChatId && styles.hasChatOpen)}>
       {/* ── Sidebar ── */}
       <aside className={styles.sidebar}>
         <header className={styles.sidebarHeader}>
-          <span className={styles.logo}>GHOST</span>
+          <span className={styles.logo}>
+            <WhisproLogo size={22} animated={false} />
+            Whispro<span className={styles.logoAccent}></span>
+          </span>
           <button
             className={styles.iconBtn}
             title="Settings"
@@ -150,11 +172,11 @@ export default function App() {
           />
         ) : (
           <div className={styles.emptyState}>
-            <div className={styles.ghostIcon}>
-              <GhostLogo size={120} animated />
+            <div className={styles.whisproIcon}>
+              <WhisproLogo size={110} animated />
             </div>
-            <p>./select_channel --or ./init_new</p>
-            <p className={styles.sub}>All traces self-destruct</p>
+            <p>Select a chat or start a new one</p>
+            <p className={styles.sub}>Whisper Without Worry</p>
           </div>
         )}
       </main>

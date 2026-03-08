@@ -1,4 +1,4 @@
-package com.ghostchat.app;
+package com.whispro.app;
 
 import com.getcapacitor.BridgeActivity;
 

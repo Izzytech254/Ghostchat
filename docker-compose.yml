@@ -1,7 +1,7 @@
 version: "3.9"
 
 # ─────────────────────────────────────────────────────────────────
-#  GhostChat – local development stack
+#  Whispro – local development stack
 #
 #  Services:
 #    relay      – Node.js WebSocket relay (can't read messages)
