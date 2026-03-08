@@ -337,8 +337,8 @@ export async function nukeAllData(): Promise<void> {
   _db = null;
 
   // Clear localStorage items (including the salt)
-  localStorage.removeItem("gc_salt");
-  sessionStorage.removeItem("gc_device");
+  localStorage.removeItem("wp_salt");
+  sessionStorage.removeItem("wp_device");
 
   // Delete the IndexedDB entirely
   await new Promise<void>((resolve, reject) => {

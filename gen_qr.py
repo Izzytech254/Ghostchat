@@ -43,7 +43,7 @@ lines = [
     "</html>",
 ]
 
-out = "/home/boss/Documents/Projects/Ghost/web-client/dist/link.html"
+out = "/home/boss/Documents/Projects/Whispro/web-client/dist/link.html"
 with open(out, "w") as f:
     f.write("\n".join(lines))
 

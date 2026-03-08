@@ -47,10 +47,10 @@ export default function App() {
     if (account && isUnlocked) {
       // Use stored deviceId or generate one per-session
       const deviceId =
-        sessionStorage.getItem("gc_device") ??
+        sessionStorage.getItem("wp_device") ??
         (() => {
           const id = uuid();
-          sessionStorage.setItem("gc_device", id);
+          sessionStorage.setItem("wp_device", id);
           return id;
         })();
 

@@ -1,6 +1,6 @@
 import os
 
-BASE = "/home/boss/Documents/Projects/Ghost/web-client/src"
+BASE = "/home/boss/Documents/Projects/Whispro/web-client/src"
 
 # ── WhisproLogo.tsx ────────────────────────────────────────────────────────────
 whispro_logo = '''/**

@@ -12,7 +12,7 @@ export default function AuthScreen() {
 
   // Check if an account exists by looking for the salt in localStorage
   // (salt is stored when account is created, so its presence means account exists)
-  const hasExistingAccount = !!localStorage.getItem("gc_salt");
+  const hasExistingAccount = !!localStorage.getItem("wp_salt");
 
   const [step, setStep] = useState<Step>(
     hasExistingAccount ? "unlock" : "landing",
@@ -42,7 +42,7 @@ export default function AuthScreen() {
     setLoading(true);
     try {
       const { key, salt } = await deriveStorageKey(passphrase);
-      localStorage.setItem("gc_salt", btoa(String.fromCharCode(...salt)));
+      localStorage.setItem("wp_salt", btoa(String.fromCharCode(...salt)));
       setStorageKey(key);
       await createAccount(username.trim());
     } catch (e) {
@@ -58,7 +58,7 @@ export default function AuthScreen() {
     setLoading(true);
 
     try {
-      const rawSalt = localStorage.getItem("gc_salt");
+      const rawSalt = localStorage.getItem("wp_salt");
       if (!rawSalt)
         throw new Error("No salt found - please create a new account.");
 
@@ -79,9 +79,7 @@ export default function AuthScreen() {
     <div className={styles.screen}>
       <div className={styles.card}>
         <WhisproLogo size={100} className={styles.logo} />
-        <h1 className={styles.title}>
-          Whispro
-        </h1>
+        <h1 className={styles.title}>Whispro</h1>
         <p className={styles.sub}>Whisper Without Worry</p>
 
         {step === "landing" && (

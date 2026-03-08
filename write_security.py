@@ -1,7 +1,7 @@
 import os
 
-BASE_KS = "/home/boss/Documents/Projects/Ghost/key-server/app"
-BASE_BE = "/home/boss/Documents/Projects/Ghost/backend/src"
+BASE_KS = "/home/boss/Documents/Projects/Whispro/key-server/app"
+BASE_BE = "/home/boss/Documents/Projects/Whispro/backend/src"
 
 # ── key-server/app/main.py ─────────────────────────────────────────────────
 main_py = """\
@@ -270,7 +270,7 @@ with open(os.path.join(BASE_KS, "main.py"), "w") as f:
 print("main.py written")
 
 # ── requirements.txt – add slowapi ─────────────────────────────────────────
-req_path = "/home/boss/Documents/Projects/Ghost/key-server/requirements.txt"
+req_path = "/home/boss/Documents/Projects/Whispro/key-server/requirements.txt"
 with open(req_path) as f:
     req = f.read()
 if "slowapi" not in req:
