@@ -1,0 +1,240 @@
+/* CallScreen - Telegram style */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-primary);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 320px;
+  text-align: center;
+}
+
+/* Video call layout */
+.videoContainer {
+  max-width: 100%;
+  width: 100%;
+  padding: 1rem;
+}
+
+.videoArea {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+  margin-bottom: 1rem;
+}
+
+.remoteVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--bg-secondary);
+}
+
+.localVideo {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 100px;
+  height: 75px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: var(--bg-secondary);
+}
+
+/* Avatar for voice calls */
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(42, 171, 238, 0.35);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.avatar.pulse {
+  transform: scale(1.05);
+  box-shadow: 0 12px 48px rgba(42, 171, 238, 0.5);
+}
+
+.avatarText {
+  font-size: 3rem;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+}
+
+/* Peer info */
+.peerName {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.secureBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(34, 197, 94, 0.2);
+  color: var(--success);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.duration {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.controlBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  width: 72px;
+  background: var(--bg-elevated);
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.controlBtn:hover {
+  background: var(--bg-surface);
+  transform: translateY(-2px);
+}
+
+.controlBtn:active {
+  transform: translateY(0);
+}
+
+.controlBtn.active {
+  background: var(--accent-glow);
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.icon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+}
+
+.label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Answer button */
+.answerBtn {
+  background: var(--success);
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.35);
+}
+
+.answerBtn:hover {
+  background: #1fa34e;
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.45);
+}
+
+.answerBtn .icon,
+.answerBtn .label {
+  color: white;
+}
+
+/* Reject / End button */
+.rejectBtn,
+.endBtn {
+  background: var(--danger);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35);
+}
+
+.rejectBtn:hover,
+.endBtn:hover {
+  background: #dc2626;
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.45);
+}
+
+.rejectBtn .icon,
+.rejectBtn .label,
+.endBtn .icon,
+.endBtn .label {
+  color: white;
+}
+
+/* Security note */
+.securityNote {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Mobile responsive */
+@media (max-height: 600px) {
+  .avatar {
+    width: 80px;
+    height: 80px;
+  }
+  .avatarText {
+    font-size: 2rem;
+  }
+  .peerName {
+    font-size: 1.5rem;
+  }
+  .duration {
+    font-size: 1.5rem;
+  }
+  .controls {
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .controlBtn {
+    width: 60px;
+    padding: 0.75rem;
+  }
+}

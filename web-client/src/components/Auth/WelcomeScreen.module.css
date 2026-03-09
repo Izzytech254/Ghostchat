@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #0a0a0f 0%, #000000 50%, #0a0a0f 100%);
+  background: var(--bg-primary);
   z-index: 9999;
   overflow: hidden;
 }
@@ -16,7 +16,7 @@
   top: -200px;
   left: 50%;
   transform: translateX(-50%);
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(42, 171, 238, 0.15) 0%, transparent 70%);
   animation: pulseGlow 4s ease-in-out infinite;
   pointer-events: none;
 }
@@ -27,7 +27,7 @@
   height: 400px;
   bottom: -100px;
   right: -100px;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 60%);
+  background: radial-gradient(circle, rgba(42, 171, 238, 0.1) 0%, transparent 60%);
   animation: pulseGlow2 5s ease-in-out infinite;
   pointer-events: none;
 }
@@ -102,7 +102,7 @@
 }
 
 .wordAccent {
-  background: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+  background: linear-gradient(90deg, var(--accent), #1e9cd7, #1a8ac4);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -116,8 +116,8 @@
 }
 
 @keyframes glowText {
-  0%, 100% { filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5)); }
-  50% { filter: drop-shadow(0 0 25px rgba(59, 130, 246, 0.8)); }
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(42, 171, 238, 0.5)); }
+  50% { filter: drop-shadow(0 0 25px rgba(42, 171, 238, 0.8)); }
 }
 
 .sloganVisible .word {
@@ -127,8 +127,7 @@
 
 .tagline {
   font-size: 14px;
-  color: #71717a;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+  color: var(--text-muted);
   letter-spacing: 2px;
   opacity: 0;
   transform: translateY(20px);
@@ -151,7 +150,7 @@
 .particle {
   position: absolute;
   font-size: 20px;
-  color: rgba(59, 130, 246, 0.3);
+  color: rgba(42, 171, 238, 0.3);
   animation: float 6s ease-in-out infinite;
 }
 

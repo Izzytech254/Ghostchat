@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAccountStore } from "@/store/accountStore";
+import { CloseIcon, AlertIcon, TrashIcon } from "@/components/UI/Icons";
 import styles from "./SettingsPanel.module.css";
 
 interface Props {
@@ -22,8 +23,8 @@ export default function SettingsPanel({ onClose }: Props) {
     <div className={styles.panel}>
       <header className={styles.header}>
         <h2 className={styles.title}>Settings</h2>
-        <button className={styles.closeBtn} onClick={onClose}>
-          ✕
+        <button className={styles.closeBtn} onClick={onClose} title="Close settings">
+          <CloseIcon size={20} color="#fff" />
         </button>
       </header>
 
@@ -74,7 +75,7 @@ export default function SettingsPanel({ onClose }: Props) {
         {confirming ? (
           <div className={styles.confirmBox}>
             <p className={styles.warnText}>
-              ⚠ This will{" "}
+              <AlertIcon size={16} color="#f59e0b" /> This will{" "}
               <strong>
                 permanently delete all messages, contacts, and keys
               </strong>
@@ -86,7 +87,7 @@ export default function SettingsPanel({ onClose }: Props) {
                 onClick={triggerSelfDestruct}
                 disabled={wiping}
               >
-                {wiping ? "💀 Wiping…" : "💀 NUKE ALL DATA"}
+                <TrashIcon size={16} color="#fff" /> {wiping ? "Wiping..." : "NUKE ALL DATA"}
               </button>
               <button
                 className={`${styles.btn} ${styles.cancelBtn}`}
@@ -101,7 +102,7 @@ export default function SettingsPanel({ onClose }: Props) {
             className={`${styles.btn} ${styles.dangerBtn}`}
             onClick={() => setConfirming(true)}
           >
-            🔥 Self-Destruct (Delete all data)
+            <TrashIcon size={16} color="#fff" /> Self-Destruct (Delete all data)
           </button>
         )}
       </section>

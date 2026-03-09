@@ -3,17 +3,15 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100dvh;
-  background: 
-    radial-gradient(ellipse at 30% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 80%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-    #000000;
+  /* Fill the parent (.app) which already accounts for safe areas – don't use 100dvh here */
+  height: 100%;
+  background: var(--bg-primary);
 }
 
 .card {
-  background: rgba(26, 26, 26, 0.8);
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  border-radius: 24px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
   padding: 48px 36px;
   width: 100%;
   max-width: 420px;
@@ -22,7 +20,6 @@
   align-items: center;
   gap: 14px;
   animation: fadeUp 280ms ease;
-  backdrop-filter: blur(20px);
 }
 
 @keyframes fadeUp {
@@ -44,15 +41,14 @@
   margin: 0;
   font-size: 28px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   letter-spacing: -0.5px;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
 }
 
 .sub {
   margin: 0;
   font-size: 14px;
-  color: #71717a;
+  color: var(--text-muted);
   font-weight: 400;
 }
 
@@ -76,41 +72,38 @@
   flex-direction: column;
   gap: 6px;
   font-size: 13px;
-  color: #a1a1aa;
+  color: var(--text-secondary);
   font-weight: 500;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
 }
 
 .input {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 14px 16px;
-  color: #fff;
+  color: var(--text-primary);
   font-size: 14px;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
   width: 100%;
 }
 
 .input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
 .input::placeholder {
-  color: #52525b;
+  color: var(--text-muted);
 }
 
 .btn {
-  background: #3b82f6;
+  background: var(--accent);
   border: none;
   border-radius: 12px;
   color: #fff;
   font-size: 14px;
   font-weight: 600;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
   padding: 14px 20px;
   cursor: pointer;
   transition: background 0.15s ease, transform 0.1s ease;
@@ -118,8 +111,7 @@
 }
 
 .btn:hover {
-  background: #2563eb;
-  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+  background: var(--accent-dim);
 }
 
 .btn:active {
@@ -130,31 +122,28 @@
   opacity: 0.35;
   cursor: not-allowed;
   transform: none;
-  box-shadow: none;
 }
 
 .btn.secondary {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #a1a1aa;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
 }
 
 .btn.secondary:hover {
-  border-color: #3b82f6;
-  color: #3b82f6;
-  background: rgba(59, 130, 246, 0.08);
-  box-shadow: none;
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-glow);
 }
 
 .error {
-  color: #fff;
+  color: var(--text-primary);
   font-size: 13px;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
   margin: 0;
   padding: 14px 16px;
   border: none;
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.15) 100%);
+  background: rgba(239, 68, 68, 0.15);
   width: 100%;
   display: flex;
   align-items: center;
@@ -163,8 +152,18 @@
 }
 
 .error::before {
-  content: "⚠";
-  font-size: 16px;
+  content: "!";
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--danger);
+  background: rgba(239, 68, 68, 0.2);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 @keyframes shake {

@@ -1,36 +1,38 @@
 :root {
+  /* Pure black theme */
   --bg-primary:    #000000;
-  --bg-secondary:  #0a0a0a;
-  --bg-surface:    #111111;
-  --bg-elevated:   #1a1a1a;
+  --bg-secondary:  #000000;
+  --bg-surface:    #0a0a0a;
+  --bg-elevated:   #121212;
 
-  --accent:        #3b82f6;
-  --accent-dim:    #2563eb;
-  --accent-bright: #60a5fa;
-  --accent-glow:   rgba(59, 130, 246, 0.15);
-  --accent-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
+  --accent:        #2AABEE;
+  --accent-dim:    #229ED9;
+  --accent-bright: #5EC8F2;
+  --accent-glow:   rgba(42, 171, 238, 0.15);
+  --accent-shadow: 0 0 20px rgba(42, 171, 238, 0.25);
 
-  --danger:  #ef4444;
-  --success: #22c55e;
-  --warning: #f59e0b;
+  --danger:  #E53935;
+  --success: #4CAF50;
+  --warning: #FFA726;
 
-  --text-primary:   #ffffff;
-  --text-secondary: #a1a1aa;
-  --text-muted:     #71717a;
+  --text-primary:   #FFFFFF;
+  --text-secondary: #8B9BA8;
+  --text-muted:     #6B7C8A;
 
   --border:        rgba(255, 255, 255, 0.08);
-  --border-bright: rgba(255, 255, 255, 0.18);
-  --shadow-sm:     0 1px 8px  rgba(0, 0, 0, 0.4);
-  --shadow-md:     0 4px 24px rgba(0, 0, 0, 0.6);
-  --shadow-glow:   0 0 30px   rgba(59, 130, 246, 0.08);
+  --border-bright: rgba(255, 255, 255, 0.15);
+  --shadow-sm:     0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-md:     0 4px 12px rgba(0, 0, 0, 0.6);
+  --shadow-glow:   0 0 30px rgba(42, 171, 238, 0.08);
 
   --radius:    8px;
   --radius-lg: 12px;
   --radius-xl: 20px;
   --radius-full: 9999px;
 
-  --msg-own:   rgba(59, 130, 246, 0.12);
-  --msg-other: rgba(255, 255, 255, 0.04);
+  /* Message bubble colors */
+  --msg-own:   #1a3a5c;
+  --msg-other: #1a1a1a;
 
   --transition-fast:   100ms ease;
   --transition-smooth: 200ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -39,6 +41,13 @@
   font-size: 14px;
   line-height: 1.5;
   color-scheme: dark;
+
+  /* Safe area insets – populated by the browser when viewport-fit=cover is set.
+     Fallback values are just in case the browser doesn't support env() yet.    */
+  --sat: env(safe-area-inset-top,    0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left,   0px);
+  --sar: env(safe-area-inset-right,  0px);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -48,10 +57,21 @@ html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  background: var(--bg-primary);
+  background: var(--bg-secondary);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Push ALL app content below the status bar / above the home indicator.
+   env(safe-area-inset-*) is populated once viewport-fit=cover is set.
+   box-sizing: border-box (already global) ensures the padding is
+   subtracted from the 100% height, not added on top of it.               */
+#root {
+  padding-top:    env(safe-area-inset-top,    0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left:   env(safe-area-inset-left,   0px);
+  padding-right:  env(safe-area-inset-right,  0px);
 }
 
 button, input, select, textarea { touch-action: manipulation; }

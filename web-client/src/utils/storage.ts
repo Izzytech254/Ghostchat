@@ -283,10 +283,16 @@ export async function saveAccount(account: Account): Promise<void> {
 export async function getAccount(): Promise<Account | null> {
   const db = await getDB();
   const records = await db.getAll("account");
-  if (!records.length) return null;
+  if (!records.length) {
+    console.log("[storage] getAccount: No account records in DB");
+    return null;
+  }
   try {
-    return await decryptValue<Account>(records[0].payload);
-  } catch {
+    const account = await decryptValue<Account>(records[0].payload);
+    console.log("[storage] getAccount: Successfully decrypted account", account?.username);
+    return account;
+  } catch (e) {
+    console.error("[storage] getAccount: Decryption failed", e);
     return null;
   }
 }

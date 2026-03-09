@@ -8,6 +8,7 @@ const config: CapacitorConfig = {
   // capacitor://localhost IS a secure context → crypto.subtle works without USB
   android: {
     allowMixedContent: true, // allow capacitor://localhost → http:// LAN requests
+    webContentsDebuggingEnabled: true, // Enable Chrome DevTools debugging
   },
 };
 

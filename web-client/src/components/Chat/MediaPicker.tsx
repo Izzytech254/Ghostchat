@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { ImageIcon, FilmIcon, MicIcon, FileIcon, AlertIcon } from "@/components/UI/Icons";
 import styles from "./MediaPicker.module.css";
 
 export type MediaType = "image" | "video" | "audio" | "file";
@@ -153,35 +154,35 @@ export default function MediaPicker({ onSelect, onClose }: MediaPickerProps) {
         </div>
       ) : error ? (
         <div className={styles.error}>
-          <span>⚠️ {error}</span>
+          <span><AlertIcon size={14} color="#f59e0b" /> {error}</span>
           <button onClick={() => setError(null)}>Try Again</button>
         </div>
       ) : (
         <div className={styles.buttons}>
           <button className={styles.btn} onClick={openFilePicker}>
             <span className={styles.iconBg}>
-              <span className={styles.icon}>🖼️</span>
+              <span className={styles.icon}><ImageIcon size={20} color="#3b82f6" /></span>
             </span>
             <span className={styles.btnText}>Photo</span>
           </button>
           
           <button className={styles.btn} onClick={openFilePicker}>
             <span className={styles.iconBg}>
-              <span className={styles.icon}>🎬</span>
+              <span className={styles.icon}><FilmIcon size={20} color="#3b82f6" /></span>
             </span>
             <span className={styles.btnText}>Video</span>
           </button>
           
           <button className={styles.btn} onClick={openFilePicker}>
             <span className={styles.iconBg}>
-              <span className={styles.icon}>🎤</span>
+              <span className={styles.icon}><MicIcon size={20} color="#3b82f6" /></span>
             </span>
             <span className={styles.btnText}>Audio</span>
           </button>
           
           <button className={styles.btn} onClick={openFilePicker}>
             <span className={styles.iconBg}>
-              <span className={styles.icon}>📁</span>
+              <span className={styles.icon}><FileIcon size={20} color="#3b82f6" /></span>
             </span>
             <span className={styles.btnText}>File</span>
           </button>

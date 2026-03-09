@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { Message } from "@/types";
 import { formatDistanceToNow } from "date-fns";
+import { CameraIcon, TimerIcon, LockIcon } from "@/components/UI/Icons";
 import styles from "./MessageBubble.module.css";
 import clsx from "clsx";
 
@@ -102,7 +103,7 @@ export default function MessageBubble({ message, onVisible }: Props) {
       )}
     >
       {message.screenshotAlert && (
-        <div className={styles.screenshotBadge}>📸 Screenshot</div>
+        <div className={styles.screenshotBadge}><CameraIcon size={12} color="#ef4444" /> Screenshot</div>
       )}
 
       <div className={styles.body}>
@@ -129,7 +130,7 @@ export default function MessageBubble({ message, onVisible }: Props) {
         
         {(media.type === "text" || !media.type) && (
           <p className={styles.text}>
-            {message.plaintextCache ? renderEmojis(message.plaintextCache) : "🔒 Encrypted"}
+            {message.plaintextCache ? renderEmojis(message.plaintextCache) : <><LockIcon size={12} color="#6b7280" /> Encrypted</>}
           </p>
         )}
       </div>
@@ -142,7 +143,7 @@ export default function MessageBubble({ message, onVisible }: Props) {
           })}
           title={`Expires ${new Date(message.expiresAt).toLocaleString()}`}
         >
-          ⏱ {formatTtl(remaining)}
+          <TimerIcon size={10} color="currentColor" /> {formatTtl(remaining)}
         </span>
 
         <span className={styles.meta}>

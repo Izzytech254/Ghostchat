@@ -19,12 +19,13 @@ def b64(data: bytes) -> str:
 
 import os
 
-def make_bundle(user_id: str = "user_abc123xy") -> dict:
+def make_bundle(user_id: str = "user_abc123xy", username: str = None) -> dict:
     ik  = b64(os.urandom(32))
     spk = b64(os.urandom(32))
     sig = b64(os.urandom(64))
     return {
         "user_id":            user_id,
+        "username":           username or f"test_{user_id[:8]}",
         "identity_key":       ik,
         "signed_pre_key":     spk,
         "signed_pre_key_id":  1,

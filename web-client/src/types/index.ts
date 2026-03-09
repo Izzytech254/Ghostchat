@@ -90,7 +90,8 @@ export type WsOutboundPacket =
   | WsRegisterPacket
   | WsMessagePacket
   | WsReadReceiptPacket
-  | WsScreenshotAckPacket;
+  | WsScreenshotAckPacket
+  | WsCallSignalOutbound;
 
 // ─── Inbound (from server) ────────────────────────────────────────────────────
 
@@ -141,4 +142,34 @@ export type WsInboundPacket =
   | WsRegisteredAck
   | WsReadReceiptInbound
   | WsScreenshotAlert
+  | WsCallSignal
   | WsError;
+
+// ─── Call signaling types ─────────────────────────────────────────────────────
+
+export type CallSignalType = "CALL_OFFER" | "CALL_ANSWER" | "CALL_ICE" | "CALL_END" | "CALL_REJECT" | "CALL_BUSY";
+
+export interface WsCallSignalOutbound {
+  type: "CALL_SIGNAL";
+  to: string;
+  signalType: CallSignalType;
+  payload: string; // encrypted JSON (SDP or ICE candidate)
+}
+
+export interface WsCallSignal {
+  type: "CALL_SIGNAL";
+  from: string;
+  signalType: CallSignalType;
+  payload: string; // encrypted SDP/ICE
+  ts: number;
+}
+
+export interface CallState {
+  status: "idle" | "calling" | "ringing" | "connected" | "ended";
+  peerId: string | null;
+  peerName: string | null;
+  isInitiator: boolean;
+  isVideoCall: boolean;
+  startTime: number | null;
+  duration: number;
+}

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Whispro adaptive icon foreground – W+P logo on transparent bg -->
-<!-- Designed for 108dp adaptive icon canvas (safe zone: 72dp centred) -->
+<!-- Whispro adaptive icon foreground - WP logo -->
 <vector
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
@@ -8,21 +7,19 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- W letter - white -->
+    <!-- Blue glow circle -->
+    <path
+        android:fillColor="#1e3a5f"
+        android:pathData="M54,54m-26,0a26,26 0,1 1,52 0a26,26 0,1 1,-52 0" />
+
+    <!-- W letter - white filled -->
     <path
         android:fillColor="#FFFFFF"
-        android:strokeWidth="6"
-        android:strokeColor="#FFFFFF"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round"
-        android:pathData="M28,35 L35,75 L44,55 L54,75 L61,35" />
+        android:pathData="M34,38 L38,38 L44,54 L50,42 L56,54 L62,38 L66,38 L57,66 L50,50 L43,66 Z" />
 
-    <!-- P letter - blue -->
+    <!-- P letter - blue filled -->
     <path
-        android:strokeWidth="6"
-        android:strokeColor="#3B82F6"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round"
-        android:pathData="M68,35 L68,75 M68,50 C68,50 84,46 84,55 C84,64 68,60 68,60" />
+        android:fillColor="#60A5FA"
+        android:pathData="M68,38 L68,66 L72,66 L72,54 L78,54 Q84,54 84,46 Q84,38 78,38 Z M72,42 L77,42 Q80,42 80,46 Q80,50 77,50 L72,50 Z" />
 
 </vector>

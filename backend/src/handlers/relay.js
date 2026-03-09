@@ -41,6 +41,8 @@ class RelayHandler {
         return this._onScreenshotAck(ws, packet);
       case "DELETE_MESSAGE":
         return this._onDeleteMessage(ws, packet);
+      case "CALL_SIGNAL":
+        return this._onCallSignal(ws, packet);
       case "PING":
         return ws.send(JSON.stringify({ type: "PONG", ts: Date.now() }));
       default:
@@ -179,6 +181,43 @@ class RelayHandler {
           ts: Date.now(),
         }),
       );
+    }
+  }
+
+  /**
+   * Forward encrypted WebRTC call signaling (offer/answer/ICE/end).
+   * Server NEVER decrypts payload - just forwards opaque encrypted blob.
+   */
+  _onCallSignal(ws, packet) {
+    const senderId = this._resolveAnonymousId(ws);
+    if (senderId === "unknown") {
+      ws.send(JSON.stringify({ type: "ERROR", code: "NOT_REGISTERED" }));
+      return;
+    }
+
+    const { to, signalType, payload, callId } = packet;
+    this.log.info({ senderId, to, signalType, callId }, "CALL_SIGNAL received");
+
+    const envelope = {
+      type: "CALL_SIGNAL",
+      from: senderId,
+      signalType,    // CALL_OFFER, CALL_ANSWER, CALL_ICE, CALL_END, etc.
+      payload,       // Encrypted signaling data - opaque to server
+      callId,
+      ts: Date.now(),
+    };
+
+    const recipientWs = this.sessions.getSocket(to);
+    if (recipientWs) {
+      this._deliver(recipientWs, envelope);
+      this.log.info({ callId, to, signalType }, "Call signal delivered");
+
+      // ACK back to sender
+      ws.send(JSON.stringify({ type: "CALL_SIGNAL_ACK", callId, signalType }));
+    } else {
+      // Recipient offline - can't take calls
+      ws.send(JSON.stringify({ type: "CALL_SIGNAL_FAILED", callId, reason: "OFFLINE" }));
+      this.log.info({ callId, to }, "Call signal failed - recipient offline");
     }
   }
 

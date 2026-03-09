@@ -1,6 +1,6 @@
 .picker {
-  background: rgba(30, 30, 35, 0.98);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   height: auto;
@@ -9,8 +9,6 @@
   max-width: 320px;
   display: flex;
   flex-direction: column;
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
   overflow: hidden;
 }
 
@@ -18,11 +16,11 @@
   display: flex;
   gap: 2px;
   padding: 6px 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--border);
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  background: rgba(25, 25, 30, 0.95);
+  background: var(--bg-elevated);
   flex-shrink: 0;
 }
 
@@ -45,11 +43,11 @@
 }
 
 .categoryBtn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--accent-glow);
 }
 
 .categoryBtn.active {
-  background: rgba(59, 130, 246, 0.2);
+  background: var(--accent-glow);
 }
 
 .categoryIcon {
@@ -73,7 +71,7 @@
   min-height: 0;
   padding: 4px 6px 8px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(59, 130, 246, 0.2) transparent;
+  scrollbar-color: var(--accent-dim) transparent;
 }
 
 .grid::-webkit-scrollbar {
@@ -85,7 +83,7 @@
 }
 
 .grid::-webkit-scrollbar-thumb {
-  background: rgba(59, 130, 246, 0.2);
+  background: var(--accent-dim);
   border-radius: 3px;
 }
 
@@ -109,7 +107,7 @@
 
 .emoji:active {
   animation: emojiClick 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  background: rgba(59, 130, 246, 0.15);
+  background: var(--accent-glow);
 }
 
 @keyframes emojiPop {

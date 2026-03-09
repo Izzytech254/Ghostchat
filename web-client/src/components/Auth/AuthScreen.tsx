@@ -41,13 +41,22 @@ export default function AuthScreen() {
 
     setLoading(true);
     try {
+      console.log("[AuthScreen] Creating account for:", username.trim());
+      setError("Deriving key...");
       const { key, salt } = await deriveStorageKey(passphrase);
       localStorage.setItem("wp_salt", btoa(String.fromCharCode(...salt)));
       setStorageKey(key);
+      console.log("[AuthScreen] Storage key set, calling createAccount");
+      setError("Registering with server...");
       await createAccount(username.trim());
+      console.log("[AuthScreen] Account created, store state:", useAccountStore.getState());
+      // Explicitly set unlocked in case createAccount didn't trigger re-render
+      setUnlocked(true);
+      setError("");
     } catch (e) {
-      console.error("Account creation failed:", e);
-      setError(e instanceof Error ? e.message : "Failed to create account.");
+      console.error("[AuthScreen] Account creation failed:", e);
+      const errMsg = e instanceof Error ? e.message : "Failed to create account.";
+      setError(errMsg);
     } finally {
       setLoading(false);
     }
@@ -58,17 +67,31 @@ export default function AuthScreen() {
     setLoading(true);
 
     try {
+      console.log("[AuthScreen] Attempting unlock...");
       const rawSalt = localStorage.getItem("wp_salt");
       if (!rawSalt)
         throw new Error("No salt found - please create a new account.");
 
       const salt = Uint8Array.from(atob(rawSalt), (c) => c.charCodeAt(0));
-      await deriveStorageKey(passphrase, salt);
+      console.log("[AuthScreen] Deriving key from passphrase...");
+      const { key } = await deriveStorageKey(passphrase, salt);
+      setStorageKey(key);
+      console.log("[AuthScreen] Storage key set, loading account...");
 
       // Reload account data now that storage is unlocked
       await loadAccount();
+      
+      // Verify account was actually loaded (decryption worked)
+      const { account } = useAccountStore.getState();
+      console.log("[AuthScreen] Account after load:", account);
+      if (!account) {
+        throw new Error("Wrong passphrase - unable to decrypt account.");
+      }
+      
+      console.log("[AuthScreen] Unlock successful, setting isUnlocked=true");
       setUnlocked(true);
     } catch (e) {
+      console.error("[AuthScreen] Unlock failed:", e);
       setError(e instanceof Error ? e.message : "Wrong passphrase.");
     } finally {
       setLoading(false);

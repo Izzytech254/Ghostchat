@@ -3,7 +3,8 @@
 set -e
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
-LAN_IP=$(hostname -I | awk '{print $1}')
+LAN_IP=$(ip -4 addr show wlan0 2>/dev/null | awk '/inet /{print $2}' | cut -d/ -f1)
+[[ -z "$LAN_IP" ]] && LAN_IP=$(ip -4 addr show | awk '/inet /{print $2}' | grep -v '^127\.' | head -1 | cut -d/ -f1)
 
 echo ""
 echo "  💬 Whispro — starting services"
@@ -56,6 +57,15 @@ else
   echo "⚠  No USB device found – plug in phone and re-run for adb reverse"
   echo "  Without this, crypto.subtle will be unavailable on the phone."
 fi
+
+# ── Vite dev server (laptop browser) ──────────────────────────────
+if ! lsof -i:5173 -sTCP:LISTEN &>/dev/null; then
+  echo "▸ Starting Vite dev server…"
+  cd "$ROOT/web-client"
+  npm run dev >>/tmp/whispro-vite.log 2>&1 &
+  sleep 2
+fi
+echo "✔ Web client      http://localhost:5173"
 
 echo ""
 echo "  All services running. Logs: /tmp/whispro-*.log"

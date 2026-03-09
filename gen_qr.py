@@ -2,9 +2,9 @@ import qrcode
 import base64
 from io import BytesIO
 
-LAN_IP = "192.168.1.170"
-URL = f"https://{LAN_IP}:8082"
-APK = f"https://{LAN_IP}:8082/whispro.apk"
+LAN_IP = "10.20.12.109"
+URL = f"http://{LAN_IP}:8082"
+APK = f"http://{LAN_IP}:8082/whispro.apk"
 
 qr = qrcode.make(APK)  # QR points to APK download
 buf = BytesIO()

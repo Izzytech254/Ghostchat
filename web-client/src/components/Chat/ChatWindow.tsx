@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { useChat } from "@/hooks/useChat";
+import { useCallContext } from "@/contexts/CallContext";
 import { getChat } from "@/utils/storage";
 import MessageBubble from "./MessageBubble";
 import TimerSelector from "./TimerSelector";
@@ -7,7 +8,7 @@ import EmojiPicker from "./EmojiPicker";
 import MediaPicker, { MediaFile } from "./MediaPicker";
 import type { DeletionType, Chat } from "@/types";
 
-import PaperPlaneIcon from "./PaperPlaneIcon";
+import { AttachmentIcon, SmileIcon, VideoIcon, CloseIcon, AlertIcon, PhoneIcon, SendIcon } from "@/components/UI/Icons";
 import styles from "./ChatWindow.module.css";
 
 interface Props {
@@ -26,6 +27,7 @@ export default function ChatWindow({ chatId, onBack }: Props) {
   const [mediaPreview, setMediaPreview] = useState<MediaFile | null>(null);
 
   const { messages, sendMessage, onMessageRead } = useChat(chatId);
+  const { callState, startCall } = useCallContext();
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -94,23 +96,41 @@ export default function ChatWindow({ chatId, onBack }: Props) {
           </button>
         )}
         <div className={styles.peerName}>{chat?.name ?? "Loading..."}</div>
-        <TimerSelector
-          ttlMs={ttlMs}
-          deletionType={delType}
-          onChangeTtl={setTtlMs}
-          onChangeDeletionType={setDelType}
-        />
+        <div className={styles.headerActions}>
+          <button
+            className={styles.callBtn}
+            onClick={() => recipientId && startCall(recipientId, chat?.name || "Unknown")}
+            title="Voice call (encrypted)"
+            disabled={!recipientId || callState.status !== "idle"}
+          >
+            <PhoneIcon size={20} color="#22c55e" />
+          </button>
+          <button
+            className={`${styles.callBtn} ${styles.videoCallBtn}`}
+            onClick={() => recipientId && startCall(recipientId, chat?.name || "Unknown", true)}
+            title="Video call (encrypted)"
+            disabled={!recipientId || callState.status !== "idle"}
+          >
+            <VideoIcon size={20} color="#3b82f6" />
+          </button>
+          <TimerSelector
+            ttlMs={ttlMs}
+            deletionType={delType}
+            onChangeTtl={setTtlMs}
+            onChangeDeletionType={setDelType}
+          />
+        </div>
       </header>
 
       {screenshotAlert && (
         <div className={styles.alert}>
-          ⚠ Screenshot detected – sender has been notified
+          <AlertIcon size={16} color="#f59e0b" /> Screenshot detected - sender has been notified
         </div>
       )}
 
       <div className={styles.messages}>
         {messages.length === 0 && (
-          <p className={styles.empty}>Whisper Without Worry ✨</p>
+          <p className={styles.empty}>Whisper Without Worry</p>
         )}
         {messages.map((msg) => (
           <MessageBubble
@@ -133,8 +153,8 @@ export default function ChatWindow({ chatId, onBack }: Props) {
           {mediaPreview.type === "audio" && (
             <audio src={mediaPreview.preview} controls />
           )}
-          <button className={styles.clearMedia} onClick={clearMedia}>
-            ×
+          <button className={styles.clearMedia} onClick={clearMedia} title="Remove media">
+            <CloseIcon size={18} color="#fff" />
           </button>
         </div>
       )}
@@ -165,14 +185,14 @@ export default function ChatWindow({ chatId, onBack }: Props) {
             onClick={() => setShowMediaPicker(!showMediaPicker)}
             title="Media"
           >
-            📎
+            <AttachmentIcon size={22} color="#6b7280" />
           </button>
           <button
             className={styles.attachBtn}
             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
             title="Emoji"
           >
-            😊
+            <SmileIcon size={22} color="#6b7280" />
           </button>
         </div>
         <textarea
@@ -189,7 +209,7 @@ export default function ChatWindow({ chatId, onBack }: Props) {
           }}
         />
         <button className={styles.sendBtn} onClick={handleSend} title="Send">
-          <PaperPlaneIcon size={22} color="#fff" />
+          <SendIcon size={22} color="#fff" />
         </button>
       </footer>
     </div>

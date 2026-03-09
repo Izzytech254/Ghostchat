@@ -1,4 +1,5 @@
 import type { DeletionType } from "@/types";
+import { TimerIcon, EyeIcon, FlameIcon } from "@/components/UI/Icons";
 import styles from "./TimerSelector.module.css";
 
 const TTL_OPTIONS: { label: string; ms: number }[] = [
@@ -11,10 +12,10 @@ const TTL_OPTIONS: { label: string; ms: number }[] = [
   { label: "7d", ms: 604_800_000 },
 ];
 
-const DEL_OPTIONS: { label: string; value: DeletionType; title: string }[] = [
-  { label: "⏱", value: "timed", title: "Delete after timer" },
-  { label: "👁", value: "read_once", title: "Delete after read" },
-  { label: "🔥", value: "burn_on_read", title: "Burn 5s after read" },
+const DEL_OPTIONS: { value: DeletionType; title: string; icon: "timer" | "eye" | "flame" }[] = [
+  { value: "timed", title: "Delete after timer", icon: "timer" },
+  { value: "read_once", title: "Delete after read", icon: "eye" },
+  { value: "burn_on_read", title: "Burn 5s after read", icon: "flame" },
 ];
 
 interface Props {
@@ -23,6 +24,12 @@ interface Props {
   onChangeTtl: (ms: number) => void;
   onChangeDeletionType: (t: DeletionType) => void;
 }
+
+const IconMap = {
+  timer: TimerIcon,
+  eye: EyeIcon,
+  flame: FlameIcon,
+};
 
 export default function TimerSelector({
   ttlMs,
@@ -46,16 +53,19 @@ export default function TimerSelector({
       </select>
 
       <div className={styles.delTypes}>
-        {DEL_OPTIONS.map((o) => (
-          <button
-            key={o.value}
-            className={`${styles.delBtn} ${deletionType === o.value ? styles.active : ""}`}
-            title={o.title}
-            onClick={() => onChangeDeletionType(o.value)}
-          >
-            {o.label}
-          </button>
-        ))}
+        {DEL_OPTIONS.map((o) => {
+          const IconComponent = IconMap[o.icon];
+          return (
+            <button
+              key={o.value}
+              className={`${styles.delBtn} ${deletionType === o.value ? styles.active : ""}`}
+              title={o.title}
+              onClick={() => onChangeDeletionType(o.value)}
+            >
+              <IconComponent size={14} color="currentColor" />
+            </button>
+          );
+        })}
       </div>
     </div>
   );

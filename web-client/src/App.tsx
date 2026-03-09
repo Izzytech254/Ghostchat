@@ -1,46 +1,49 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAccountStore } from "@/store/accountStore";
 import { useMessageStore } from "@/store/messageStore";
 import { wsClient } from "@/utils/wsClient";
 import { getChats, saveChat } from "@/utils/storage";
+import { playNotificationSound, showNotification } from "@/utils/sounds";
 import { v4 as uuid } from "uuid";
 import clsx from "clsx";
 import ChatList from "@/components/Chat/ChatList";
 import ChatWindow from "@/components/Chat/ChatWindow";
 import AuthScreen from "@/components/Auth/AuthScreen";
-import WelcomeScreen from "@/components/Auth/WelcomeScreen";
 import SettingsPanel from "@/components/Settings/SettingsPanel";
 import WhisproLogo from "@/components/WhisproLogo";
+import { CallProvider } from "@/contexts/CallContext";
+import GlobalCallOverlay from "@/components/Chat/GlobalCallOverlay";
+import { ToastContainer, useToastStore } from "@/components/UI/ToastNotification";
 import type { WsInboundPacket, Message } from "@/types";
 import styles from "./App.module.css";
 
 type View = "chat" | "settings";
 
 export default function App() {
-  const { account, isUnlocked, loadAccount } = useAccountStore();
+  const account = useAccountStore((s) => s.account);
+  const isUnlocked = useAccountStore((s) => s.isUnlocked);
+  const loadAccount = useAccountStore((s) => s.loadAccount);
   const { addInboundMessage } = useMessageStore();
+  const showToast = useToastStore((s) => s.showToast);
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
+  const activeChatIdRef = useRef<string | null>(null);
   const [view, setView] = useState<View>("chat");
   const [chatRefreshKey, setChatRefreshKey] = useState(0);
-  const [showWelcome, setShowWelcome] = useState(false);
-  const [hasSeenWelcome, setHasSeenWelcome] = useState(false);
+
+  // Keep ref in sync so the WS handler closure always sees the latest active chat
+  useEffect(() => { activeChatIdRef.current = activeChatId; }, [activeChatId]);
 
   // Load account from IndexedDB on startup
   useEffect(() => {
     loadAccount();
   }, []);
 
-  // Show welcome screen after first unlock
+  // Request notification permission early (browser only - native handled separately)
   useEffect(() => {
-    if (account && isUnlocked && !hasSeenWelcome) {
-      setShowWelcome(true);
-      setHasSeenWelcome(true);
+    if (account && isUnlocked && typeof Notification !== 'undefined' && Notification.permission === "default") {
+      Notification.requestPermission();
     }
-  }, [account, isUnlocked, hasSeenWelcome]);
-
-  const handleWelcomeComplete = () => {
-    setShowWelcome(false);
-  };
+  }, [account, isUnlocked]);
 
   // Connect WebSocket once account is available
   useEffect(() => {
@@ -117,69 +120,109 @@ export default function App() {
       };
 
       await addInboundMessage(msg);
+
+      // Always play sound
+      playNotificationSound();
+
+      // Show in-app toast if the user isn't already looking at this chat
+      const isViewingThisChat = activeChatIdRef.current === chat.id;
+      if (!isViewingThisChat) {
+        const senderLabel = chat.name || senderId.slice(0, 8);
+        const preview = plaintext.length > 80 ? plaintext.slice(0, 80) + "…" : plaintext;
+        showToast({
+          title: senderLabel,
+          message: preview,
+          avatarLetter: senderLabel.charAt(0).toUpperCase(),
+          onClick: () => {
+            setActiveChatId(chat!.id);
+            setView("chat");
+          },
+        });
+      }
+
+      // Also fire OS notification when app is backgrounded
+      if (!document.hasFocus()) {
+        showNotification(
+          chat.name || senderId.slice(0, 8),
+          plaintext.length > 100 ? plaintext.slice(0, 100) + "..." : plaintext,
+          `msg-${senderId}`
+        );
+      }
     };
 
     const unsub = wsClient.onMessage(handleMessage);
     return unsub;
   }, [account?.id, isUnlocked, addInboundMessage]);
 
-  if (!account || !isUnlocked) {
-    return <AuthScreen />;
-  }
+  // Debug: log render state
+  console.log("[App] render - account:", account?.username, "isUnlocked:", isUnlocked);
 
-  if (showWelcome) {
-    return <WelcomeScreen onComplete={handleWelcomeComplete} />;
+  if (!account || !isUnlocked) {
+    return (
+      <>
+        <ToastContainer />
+        <AuthScreen />
+      </>
+    );
   }
 
   return (
-    <div className={clsx(styles.app, activeChatId && styles.hasChatOpen)}>
-      {/* ── Sidebar ── */}
-      <aside className={styles.sidebar}>
-        <header className={styles.sidebarHeader}>
-          <span className={styles.logo}>
-            <WhisproLogo size={22} animated={false} />
-            Whispro<span className={styles.logoAccent}></span>
-          </span>
-          <button
-            className={styles.iconBtn}
-            title="Settings"
-            onClick={() => setView("settings")}
-          >
-            ⚙
-          </button>
-        </header>
+    <CallProvider>
+      <div className={clsx(styles.app, activeChatId && styles.hasChatOpen)}>
+        {/* ── Sidebar ── */}
+        <aside className={styles.sidebar}>
+          <header className={styles.sidebarHeader}>
+            <span className={styles.logo}>
+              <WhisproLogo size={22} animated={false} />
+              Whispro<span className={styles.logoAccent}></span>
+            </span>
+            <button
+              className={styles.iconBtn}
+              title="Settings"
+              onClick={() => setView("settings")}
+            >
+              ⚙
+            </button>
+          </header>
 
-        {view === "chat" ? (
-          <ChatList
-            key={chatRefreshKey}
-            activeChatId={activeChatId}
-            onSelectChat={(id) => {
-              setActiveChatId(id);
-              setView("chat");
-            }}
-          />
-        ) : (
-          <SettingsPanel onClose={() => setView("chat")} />
-        )}
-      </aside>
+          {view === "chat" ? (
+            <ChatList
+              key={chatRefreshKey}
+              activeChatId={activeChatId}
+              onSelectChat={(id) => {
+                setActiveChatId(id);
+                setView("chat");
+              }}
+            />
+          ) : (
+            <SettingsPanel onClose={() => setView("chat")} />
+          )}
+        </aside>
 
-      {/* ── Main pane ── */}
-      <main className={styles.main}>
-        {activeChatId ? (
-          <ChatWindow
-            chatId={activeChatId}
-            onBack={() => setActiveChatId(null)}
-          />
-        ) : (
-          <div className={styles.emptyState}>
-            <div className={styles.whisproIcon}>
-              <WhisproLogo size={110} animated />
+        {/* ── Main pane ── */}
+        <main className={styles.main}>
+          {activeChatId ? (
+            <ChatWindow
+              chatId={activeChatId}
+              onBack={() => setActiveChatId(null)}
+            />
+          ) : (
+            <div className={styles.emptyState}>
+              <div className={styles.whisproIcon}>
+                <WhisproLogo size={110} animated />
+              </div>
+              <p>Select a chat or start a new one</p>
+              <p className={styles.sub}>Whisper Without Worry</p>
             </div>
-            <p>Select a chat or start a new one</p>
-            <p className={styles.sub}>Whisper Without Worry</p>
-          </div>
-        )}
-      </main>
-    </div>
+          )}
+        </main>
+
+        {/* Global incoming call overlay */}
+        <GlobalCallOverlay />
+
+        {/* In-app toast notifications */}
+        <ToastContainer />
+      </div>
+    </CallProvider>
   );
 }
